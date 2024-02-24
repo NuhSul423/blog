@@ -1,7 +1,7 @@
 # Nuhsul-main
 
 #### 介绍
-主仓库
+主仓库，基于hexo搭建的博客网站，主题用的hexo-theme-cola，可在themes中更改主题相关设置。博客放在source/_post中
 
 #### 软件架构
 软件架构说明
