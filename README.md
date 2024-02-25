@@ -16,7 +16,8 @@
 #### 使用说明
 
 1.  在修改相关设置更新后pc网页端并不会立刻生效。可在手机端查看效果。
-2.  修改首页，友情链接的跳转地址在blog/ themes / hexo-theme-cola-master / layout / _partial /header.ejs中
+2.  修改顶部的首页，友情链接的跳转地址在blog/ themes / hexo-theme-cola-master / layout / _partial /header.ejs中
+而修改左侧的跳转地址在blog/ themes /_config.ymml中。
 3.  修改背景图片等在blog/ themes / hexo-theme-cola-master / source / css/layout.styl中
 
 #### 参与贡献
