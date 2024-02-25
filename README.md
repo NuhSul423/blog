@@ -1,7 +1,7 @@
-# Nuhsul-main
+# Nuhsul.blog
 
 #### 介绍
-主仓库，基于hexo搭建的博客网站，主题用的hexo-theme-cola，可在themes中更改主题相关设置。博客放在source/_post中
+主仓库，基于hexo搭建的博客网站，主题用的hexo-theme-cola，可在themes中更改主题相关设置,如友情链接等可在_config.xml中进行修改。博客放在source/_post中.
 
 #### 软件架构
 软件架构说明
@@ -15,7 +15,7 @@
 
 #### 使用说明
 
-1.  xxxx
+1.  在修改相关设置更新后pc网页端并不会立刻生效。可在手机端查看效果。
 2.  xxxx
 3.  xxxx
 
