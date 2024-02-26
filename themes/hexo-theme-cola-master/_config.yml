@@ -59,8 +59,8 @@ copyright: 备案信息放这里
 # 是否开启文章评论 Valine:https://valine.js.org/configuration.htm
 comments:
   enable: true
-  appId: 'Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz'
-  appKey: 'qOqoiUHhH1TGtLRUYURkLRQX'
+  appId: 'lLEeaxkWrAa6YQzVijK2UwF5-gzGzoHsz'
+  appKey: 'cflO23Azr0be26ys09XSBctk'
   placeholder: '请留下你宝贵的意见吧~'
   meta: ['nick']
   recordIP: true
