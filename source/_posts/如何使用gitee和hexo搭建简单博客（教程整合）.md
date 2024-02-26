@@ -2,6 +2,7 @@
 title: 如何使用gitee和hexo搭建简单博客（教程整合）
 date: 2024-2-26 11:27:11
 tag: 学习
+cover: https://upload-bbs.mihoyo.com/upload/2020/12/07/73756022/45fae9fa4184403108eb21a629652505_7673182443294617423.png?x-oss-process=image/resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png
 ---
 
 
