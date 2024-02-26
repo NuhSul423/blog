@@ -16,10 +16,12 @@
 #### 使用说明
 由于原本本地部署的时候能正确跳转，而线上部署发现链接可能出现无法跳转至指定地址，故而列出下面这些可能会修改的地方，以供参考：
 1.  在修改相关设置更新后pc网页端并不会立刻生效。可在手机端查看效果。
-2.  修改顶部的首页，友情链接的跳转地址在blog/ themes / hexo-theme-cola-master / layout / _partial /header.ejs中。
+2.  修改顶部的首页，友情链接的跳转地址在blog/ themes / hexo-theme-cola-master / layout / /_partial /header.ejs中。
 而修改左侧的跳转地址在blog/ themes /_config.ymml中。
 3.  修改背景图片等在blog/ themes / hexo-theme-cola-master / source / css/layout.styl中。
-4.  修改归档，标签，分类等跳转地址在 blog/ themes / hexo-theme-cola-master / layout / _partial / main-left.ejs 中。
+4.  修改归档，标签，分类等跳转地址在 blog/ themes / hexo-theme-cola-master / layout / /_partial / main-left.ejs 中。
+5.  评论区修改注意事项，需要在leancloud.去注册自己的账号，将theme/_config.yml中的api修改为自己的api才能管理自己的评论区。
+6.	注意上传博客时在文章中将要将时间date带上，或者修改_config.xml中修改上传博客命名方式，因为不带时间就会出现每次一更新，不带时间的博客会以最新时间为准，博客评论区是绑定文章的，会造成评论区的丢失。
 
 #### 参与贡献
 
