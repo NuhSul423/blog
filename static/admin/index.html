@@ -5,73 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blog Admin</title>
   <link rel="stylesheet" href="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.css" />
+  <style>
+    #login-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f5f5f5;
+    }
+    #login-panel h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    #token-input {
+      width: 300px;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    #login-btn {
+      width: 300px;
+      padding: 12px;
+      background: #24292e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #login-btn:hover {
+      background: #30363d;
+    }
+    .hint {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
+  <div id="login-panel">
+    <h1>博客管理后台</h1>
+    <input type="text" id="token-input" placeholder="请输入 GitHub Personal Access Token" />
+    <button id="login-btn">登录</button>
+    <p class="hint">获取 Token: https://github.com/settings/tokens → 勾选 repo 权限</p>
+  </div>
+
   <script src="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js"></script>
   <script>
-    CMS.init({
-      config: {
-        backend: {
-          name: 'github',
-          repo: 'NuhSul423/blog',
-          branch: 'main',
-          auth_type: 'implicit',
-          client_id: 'Ov23li1pLAV6fyLXMBP5'
-        },
-        publish_mode: 'editorial_workflow',
-        media_folder: 'source/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'post',
-            label: '文章',
-            folder: 'source/_posts',
-            create: true,
-            slug: ':year-:month-:day-:title',
-            fields: [
-              { label: '标题', name: 'title', widget: 'string' },
-              { label: '日期', name: 'date', widget: 'datetime' },
-              { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] },
-              { label: '标签', name: 'tags', widget: 'list' },
-              { label: '内容', name: 'body', widget: 'markdown' }
-            ]
+    const loginPanel = document.getElementById('login-panel');
+    const tokenInput = document.getElementById('token-input');
+    const loginBtn = document.getElementById('login-btn');
+
+    function initCMS(token) {
+      loginPanel.style.display = 'none';
+      
+      CMS.init({
+        config: {
+          backend: {
+            name: 'github',
+            repo: 'NuhSul423/blog',
+            branch: 'main',
+            auth_type: 'oauth',
+            api_root: 'https://api.github.com',
+            base_url: 'https://api.github.com'
           },
-          {
-            name: 'page',
-            label: '页面',
-            files: [
-              {
-                label: '关于页面',
-                name: 'about',
-                file: 'source/about/index.md',
-                fields: [
-                  { label: '标题', name: 'title', widget: 'string' },
-                  { label: '内容', name: 'body', widget: 'markdown' }
-                ]
-              },
-              {
-                label: '链接页面',
-                name: 'link',
-                file: 'source/link/index.md',
-                fields: [
-                  { label: '标题', name: 'title', widget: 'string' },
-                  { label: '内容', name: 'body', widget: 'markdown' }
-                ]
-              },
-              {
-                label: '工具页面',
-                name: 'tools',
-                file: 'source/tools/index.md',
-                fields: [
-                  { label: '标题', name: 'title', widget: 'string' },
-                  { label: '内容', name: 'body', widget: 'markdown' }
-                ]
-              }
-            ]
-          }
-        ]
+          publish_mode: 'editorial_workflow',
+          media_folder: 'source/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'post',
+              label: '文章',
+              folder: 'source/_posts',
+              create: true,
+              slug: ':year-:month-:day-:title',
+              fields: [
+                { label: '标题', name: 'title', widget: 'string' },
+                { label: '日期', name: 'date', widget: 'datetime' },
+                { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] },
+                { label: '标签', name: 'tags', widget: 'list' },
+                { label: '内容', name: 'body', widget: 'markdown' }
+              ]
+            },
+            {
+              name: 'page',
+              label: '页面',
+              files: [
+                {
+                  label: '关于页面',
+                  name: 'about',
+                  file: 'source/about/index.md',
+                  fields: [
+                    { label: '标题', name: 'title', widget: 'string' },
+                    { label: '内容', name: 'body', widget: 'markdown' }
+                  ]
+                },
+                {
+                  label: '链接页面',
+                  name: 'link',
+                  file: 'source/link/index.md',
+                  fields: [
+                    { label: '标题', name: 'title', widget: 'string' },
+                    { label: '内容', name: 'body', widget: 'markdown' }
+                  ]
+                },
+                {
+                  label: '工具页面',
+                  name: 'tools',
+                  file: 'source/tools/index.md',
+                  fields: [
+                    { label: '标题', name: 'title', widget: 'string' },
+                    { label: '内容', name: 'body', widget: 'markdown' }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      });
+    }
+
+    loginBtn.addEventListener('click', () => {
+      const token = tokenInput.value.trim();
+      if (token) {
+        window.localStorage.setItem('netlify-cms-oauth-token', token);
+        initCMS(token);
       }
     });
+
+    tokenInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        loginBtn.click();
+      }
+    });
+
+    const savedToken = window.localStorage.getItem('netlify-cms-oauth-token');
+    if (savedToken) {
+      initCMS(savedToken);
+    }
   </script>
 </body>
 </html>
