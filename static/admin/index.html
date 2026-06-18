@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blog Admin</title>
-  <link rel="stylesheet" href="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.css" />
+  <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
 </head>
 <body>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
     CMS.init({
       config: {
@@ -15,7 +15,8 @@
           name: 'github',
           repo: 'NuhSul423/blog',
           branch: 'main',
-          auth_type: 'manual'
+          auth_type: 'implicit',
+          client_id: 'Ov23li1pLAV6fyLXMBP5'
         },
         publish_mode: 'editorial_workflow',
         media_folder: 'source/uploads',
