@@ -2,14 +2,16 @@
 
 <%
   const tools = []
-  theme.tools.forEach(tool => {
-    tools.push({
-      cover: tool[0],
-      title: tool[1],
-      intro: tool[2],
-      link: tool[3],
+  if (theme.tools && Array.isArray(theme.tools)) {
+    theme.tools.forEach(tool => {
+      tools.push({
+        cover: tool[0],
+        title: tool[1],
+        intro: tool[2],
+        link: tool[3],
+      })
     })
-  })
+  }
 %>
 
 <div class="tools">
