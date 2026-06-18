@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "public"
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/:splat"
+  status = 200
+
+[[headers]]
+  for = "/admin/config.yml"
+  [headers.values]
+    Content-Type = "text/yaml"
