@@ -2,11 +2,7 @@ backend:
   name: github
   repo: NuhSul423/blog
   branch: main
-  auth_type: implicit
-  client_id: Ov23li1pLAV6fyLXMBP5
-  authorize_url: https://github.com/login/oauth/authorize
-  access_token_url: https://github.com/login/oauth/access_token
-  app_url: https://super-meringue-6c70e2.netlify.app
+  auth_type: manual
 
 publish_mode: editorial_workflow
 media_folder: source/uploads
