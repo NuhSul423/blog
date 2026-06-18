@@ -12,7 +12,14 @@
   ],
   "routes": [
     {
-      "src": "/admin/?",
+      "src": "/admin/config.yml",
+      "dest": "/admin/config.yml",
+      "headers": {
+        "Content-Type": "text/yaml"
+      }
+    },
+    {
+      "src": "/admin/index.html",
       "dest": "/admin/index.html"
     },
     {
