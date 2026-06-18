@@ -9,107 +9,68 @@
 <body>
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
   <script>
-    const GITHUB_CLIENT_ID = 'Ov23li1pLAV6fyLXMBP5';
-    const OAUTH_PROXY_URL = 'https://blog-two-iota-30.vercel.app/api/callback';
-
-    function checkToken() {
-      const token = window.localStorage.getItem('netlify-cms-oauth-token');
-      if (token) {
-        return token;
-      }
-      return null;
-    }
-
-    function login() {
-      const authUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(OAUTH_PROXY_URL)}&scope=repo`;
-      const popup = window.open(authUrl, '_blank', 'width=600,height=600');
-      
-      const checkPopup = setInterval(() => {
-        if (popup.closed) {
-          clearInterval(checkPopup);
-          window.location.reload();
-        }
-      }, 1000);
-    }
-
-    function handleOAuthCallback(token) {
-      window.localStorage.setItem('netlify-cms-oauth-token', token);
-      window.opener.location.reload();
-      window.close();
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    
-    if (token) {
-      handleOAuthCallback(token);
-    } else {
-      const existingToken = checkToken();
-      
-      CMS.init({
-        config: {
-          backend: {
-            name: 'github',
-            repo: 'NuhSul423/blog',
-            branch: 'main',
-            auth_type: 'oauth',
-            oauth_proxy_url: OAUTH_PROXY_URL
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'NuhSul423/blog',
+          branch: 'main',
+          auth_type: 'manual'
+        },
+        publish_mode: 'editorial_workflow',
+        media_folder: 'source/uploads',
+        public_folder: '/uploads',
+        collections: [
+          {
+            name: 'post',
+            label: '文章',
+            folder: 'source/_posts',
+            create: true,
+            slug: ':year-:month-:day-:title',
+            fields: [
+              { label: '标题', name: 'title', widget: 'string' },
+              { label: '日期', name: 'date', widget: 'datetime' },
+              { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] },
+              { label: '标签', name: 'tags', widget: 'list' },
+              { label: '内容', name: 'body', widget: 'markdown' }
+            ]
           },
-          publish_mode: 'editorial_workflow',
-          media_folder: 'source/uploads',
-          public_folder: '/uploads',
-          collections: [
-            {
-              name: 'post',
-              label: '文章',
-              folder: 'source/_posts',
-              create: true,
-              slug: ':year-:month-:day-:title',
-              fields: [
-                { label: '标题', name: 'title', widget: 'string' },
-                { label: '日期', name: 'date', widget: 'datetime' },
-                { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] },
-                { label: '标签', name: 'tags', widget: 'list' },
-                { label: '内容', name: 'body', widget: 'markdown' }
-              ]
-            },
-            {
-              name: 'page',
-              label: '页面',
-              files: [
-                {
-                  label: '关于页面',
-                  name: 'about',
-                  file: 'source/about/index.md',
-                  fields: [
-                    { label: '标题', name: 'title', widget: 'string' },
-                    { label: '内容', name: 'body', widget: 'markdown' }
-                  ]
-                },
-                {
-                  label: '链接页面',
-                  name: 'link',
-                  file: 'source/link/index.md',
-                  fields: [
-                    { label: '标题', name: 'title', widget: 'string' },
-                    { label: '内容', name: 'body', widget: 'markdown' }
-                  ]
-                },
-                {
-                  label: '工具页面',
-                  name: 'tools',
-                  file: 'source/tools/index.md',
-                  fields: [
-                    { label: '标题', name: 'title', widget: 'string' },
-                    { label: '内容', name: 'body', widget: 'markdown' }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      });
-    }
+          {
+            name: 'page',
+            label: '页面',
+            files: [
+              {
+                label: '关于页面',
+                name: 'about',
+                file: 'source/about/index.md',
+                fields: [
+                  { label: '标题', name: 'title', widget: 'string' },
+                  { label: '内容', name: 'body', widget: 'markdown' }
+                ]
+              },
+              {
+                label: '链接页面',
+                name: 'link',
+                file: 'source/link/index.md',
+                fields: [
+                  { label: '标题', name: 'title', widget: 'string' },
+                  { label: '内容', name: 'body', widget: 'markdown' }
+                ]
+              },
+              {
+                label: '工具页面',
+                name: 'tools',
+                file: 'source/tools/index.md',
+                fields: [
+                  { label: '标题', name: 'title', widget: 'string' },
+                  { label: '内容', name: 'body', widget: 'markdown' }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    });
   </script>
 </body>
 </html>
