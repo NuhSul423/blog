@@ -1,22 +1,21 @@
 const https = require('https');
 
 module.exports = async (req, res) => {
-  const { code, provider } = req.query;
+  const { code } = req.query;
 
-  if (!code && !provider) {
-    res.status(400).json({ error: 'Missing code or provider' });
+  if (!code) {
+    res.status(400).json({ error: 'Missing code' });
     return;
   }
 
   const clientId = 'Ov23li1pLAV6fyLXMBP5';
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-  const redirectUri = `${req.headers.origin}/api/callback`;
 
   const postData = JSON.stringify({
     client_id: clientId,
     client_secret: clientSecret,
     code: code,
-    redirect_uri: redirectUri
+    redirect_uri: 'https://blog-two-iota-30.vercel.app/admin/'
   });
 
   const options = {
@@ -39,6 +38,7 @@ module.exports = async (req, res) => {
       githubRes.on('end', () => {
         try {
           const result = JSON.parse(data);
+          
           if (result.error) {
             res.status(400).json({ error: result.error });
             resolve();
@@ -48,8 +48,9 @@ module.exports = async (req, res) => {
           res.status(200).json({
             provider: 'github',
             token: result.access_token,
-            token_type: 'bearer',
-            expires_in: 3600
+            token_type: result.token_type || 'bearer',
+            expires_in: result.expires_in || 3600,
+            scope: result.scope || 'repo'
           });
         } catch (error) {
           res.status(500).json({ error: error.message });
