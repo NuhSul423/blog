@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const srcDir = path.join(__dirname, 'static/admin');
-const destDir = path.join(__dirname, 'public/admin');
+const srcDir = path.join(path.resolve(__dirname, '..'), 'static/admin');
+const destDir = path.join(path.resolve(__dirname, '..'), 'public/admin');
 
 function copyDir(src, dest) {
   if (!fs.existsSync(dest)) {
