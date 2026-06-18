@@ -2,8 +2,6 @@ backend:
   name: github
   repo: NuhSul423/blog
   branch: main
-  base_url: https://api.github.com
-  client_id: Ov23li1pLAV6fyLXMBP5
 
 publish_mode: editorial_workflow
 media_folder: source/uploads
