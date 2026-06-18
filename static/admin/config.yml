@@ -1,0 +1,44 @@
+backend:
+  name: github
+  repo: NuhSul423/blog
+  branch: main
+  base_url: https://api.github.com
+
+publish_mode: editorial_workflow
+media_folder: source/uploads
+public_folder: /uploads
+
+collections:
+  - name: 'post'
+    label: '文章'
+    folder: 'source/_posts'
+    create: true
+    slug: ':year-:month-:day-:title'
+    fields:
+      - { label: '标题', name: 'title', widget: 'string' }
+      - { label: '日期', name: 'date', widget: 'datetime' }
+      - { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] }
+      - { label: '标签', name: 'tags', widget: 'list' }
+      - { label: '内容', name: 'body', widget: 'markdown' }
+
+  - name: 'page'
+    label: '页面'
+    files:
+      - label: '关于页面'
+        name: 'about'
+        file: 'source/about/index.md'
+        fields:
+          - { label: '标题', name: 'title', widget: 'string' }
+          - { label: '内容', name: 'body', widget: 'markdown' }
+      - label: '链接页面'
+        name: 'link'
+        file: 'source/link/index.md'
+        fields:
+          - { label: '标题', name: 'title', widget: 'string' }
+          - { label: '内容', name: 'body', widget: 'markdown' }
+      - label: '工具页面'
+        name: 'tools'
+        file: 'source/tools/index.md'
+        fields:
+          - { label: '标题', name: 'title', widget: 'string' }
+          - { label: '内容', name: 'body', widget: 'markdown' }
