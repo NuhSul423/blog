@@ -16,11 +16,16 @@ exports.handler = async (event, context) => {
   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}`;
 
   return {
-    statusCode: 302,
+    statusCode: 200,
     headers: {
-      Location: authUrl,
-      'Cache-Control': 'no-cache'
-    }
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    },
+    body: JSON.stringify({
+      authorize_url: authUrl
+    })
   };
 };
 
