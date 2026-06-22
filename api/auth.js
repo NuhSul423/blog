@@ -1,7 +1,7 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  const { code, provider } = event.queryStringParameters || {};
+  const { code, provider, code_challenge, state } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
     return await exchangeCodeForToken(code);
@@ -11,7 +11,15 @@ exports.handler = async (event, context) => {
   const redirectUri = `${event.headers.origin}/admin/`;
   const scope = 'repo';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`;
+  let authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code`;
+  
+  if (code_challenge) {
+    authUrl += `&code_challenge=${code_challenge}&code_challenge_method=S256`;
+  }
+  
+  if (state) {
+    authUrl += `&state=${state}`;
+  }
 
   return {
     statusCode: 302,
