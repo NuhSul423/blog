@@ -3,7 +3,8 @@ backend:
   repo: NuhSul423/blog
   branch: main
   auth_type: pkce
-  auth_endpoint: .netlify/functions/auth
+  auth_endpoint: https://super-meringue-6c70e2.netlify.app/.netlify/functions/auth
+  base_url: https://super-meringue-6c70e2.netlify.app
 
 publish_mode: editorial_workflow
 media_folder: source/uploads
