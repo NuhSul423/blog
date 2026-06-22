@@ -1,7 +1,7 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  const { code, provider, state } = event.queryStringParameters || {};
+  const { code, provider, state, code_challenge } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
     return await exchangeCodeForToken(code);
@@ -10,10 +10,10 @@ exports.handler = async (event, context) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const host = event.headers.host || event.headers['x-forwarded-host'] || 'super-meringue-6c70e2.netlify.app';
   const protocol = event.headers['x-forwarded-proto'] || 'https';
-  const redirectUri = `${protocol}://${host}/admin/callback.html`;
+  const redirectUri = `${protocol}://${host}/admin/`;
   const scope = 'repo';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}`;
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}${code_challenge ? `&code_challenge=${code_challenge}&code_challenge_method=S256` : ''}`;
 
   return {
     statusCode: 200,
