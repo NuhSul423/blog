@@ -1,7 +1,7 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  const { code, provider } = event.queryStringParameters || {};
+  const { code, provider, state } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
     return await exchangeCodeForToken(code);
@@ -11,12 +11,15 @@ exports.handler = async (event, context) => {
   const redirectUri = `${event.headers.origin}/admin/`;
   const scope = 'repo';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code`;
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}`;
 
   return {
     statusCode: 200,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': event.headers.origin || '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
     },
     body: JSON.stringify({
       authorize_url: authUrl
@@ -59,7 +62,8 @@ async function exchangeCodeForToken(code) {
             resolve({
               statusCode: 400,
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
               },
               body: JSON.stringify({ error: result.error_description || result.error })
             });
@@ -69,7 +73,8 @@ async function exchangeCodeForToken(code) {
           resolve({
             statusCode: 200,
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify({
               provider: 'github',
@@ -83,7 +88,8 @@ async function exchangeCodeForToken(code) {
           resolve({
             statusCode: 500,
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify({ error: error.message })
           });
@@ -95,7 +101,8 @@ async function exchangeCodeForToken(code) {
       resolve({
         statusCode: 500,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({ error: error.message })
       });
