@@ -8,11 +8,6 @@
   to = "/admin/:splat"
   status = 200
 
-[[redirects]]
-  from = "/.netlify/functions/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
 [[headers]]
   for = "/admin/config.yml"
   [headers.values]
