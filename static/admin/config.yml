@@ -2,7 +2,9 @@ backend:
   name: github
   repo: NuhSul423/blog
   branch: main
-  auth_type: pkce
+  auth_type: oauth
+  auth_endpoint: /api/auth
+  base_url: https://super-meringue-6c70e2.netlify.app
 
 publish_mode: editorial_workflow
 media_folder: source/uploads

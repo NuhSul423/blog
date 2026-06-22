@@ -1,7 +1,7 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  const { code, provider, state, code_challenge } = event.queryStringParameters || {};
+  const { code, provider, state } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
     return await exchangeCodeForToken(code);
@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
   const redirectUri = `${protocol}://${host}/admin/`;
   const scope = 'repo';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}${code_challenge ? `&code_challenge=${code_challenge}&code_challenge_method=S256` : ''}`;
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}`;
 
   return {
     statusCode: 200,
