@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     client_id: clientId,
     client_secret: clientSecret,
     code: code,
-    redirect_uri: 'https://blog-two-iota-30.vercel.app/admin/'
+    redirect_uri: 'https://super-meringue-6c70e2.netlify.app/admin/'
   });
 
   const options = {

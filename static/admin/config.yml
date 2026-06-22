@@ -2,7 +2,8 @@ backend:
   name: github
   repo: NuhSul423/blog
   branch: main
-  auth_type: manual
+  auth_type: implicit
+  auth_endpoint: .netlify/functions/auth
 
 publish_mode: editorial_workflow
 media_folder: source/uploads
