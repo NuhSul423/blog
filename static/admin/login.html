@@ -53,10 +53,7 @@
 <body>
   <div class="container" id="app">
     <h1>Blog Admin</h1>
-    <a href="https://github.com/login/oauth/authorize?client_id=Ov23li1pLAV6fyLXMBP5&redirect_uri=https://super-meringue-6c70e2.netlify.app/admin/callback.html&scope=repo" class="btn">
-      <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
-      Login with GitHub
-    </a>
+    <div class="loading">Loading...</div>
   </div>
 
   <script>
@@ -66,7 +63,7 @@
     if (code) {
       document.getElementById('app').innerHTML = '<h1>Blog Admin</h1><div class="loading">Authenticating...</div>';
       
-      fetch('https://super-meringue-6c70e2.netlify.app/.netlify/functions/auth?code=' + code + '&provider=github', {
+      fetch(window.location.origin + '/.netlify/functions/auth?code=' + code + '&provider=github', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -88,6 +85,26 @@
       })
       .catch(error => {
         document.getElementById('app').innerHTML = '<h1>Error</h1><p>' + error.message + '</p><a href="login.html" class="btn">Try again</a>';
+      });
+    } else {
+      fetch(window.location.origin + '/.netlify/functions/auth?provider=github', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.authorize_url) {
+          document.getElementById('app').innerHTML = '<h1>Blog Admin</h1><a href="' + data.authorize_url + '" class="btn"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">Login with GitHub</a>';
+        } else {
+          document.getElementById('app').innerHTML = '<h1>Error</h1><p>' + (data.error || 'Failed to get auth URL') + '</p><div class="loading">Reloading...</div>';
+          setTimeout(() => window.location.reload(), 3000);
+        }
+      })
+      .catch(error => {
+        document.getElementById('app').innerHTML = '<h1>Error</h1><p>' + error.message + '</p><div class="loading">Reloading...</div>';
+        setTimeout(() => window.location.reload(), 3000);
       });
     }
   </script>

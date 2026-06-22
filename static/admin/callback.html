@@ -40,7 +40,7 @@
       alert('Authentication failed: ' + error);
       window.location.href = 'login.html';
     } else if (code) {
-      fetch('https://super-meringue-6c70e2.netlify.app/.netlify/functions/auth?code=' + code + '&provider=github', {
+      fetch(window.location.origin + '/.netlify/functions/auth?code=' + code + '&provider=github', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
