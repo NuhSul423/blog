@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const host = event.headers.host || event.headers['x-forwarded-host'] || 'super-meringue-6c70e2.netlify.app';
   const protocol = event.headers['x-forwarded-proto'] || 'https';
-  const redirectUri = `${protocol}://${host}/admin/`;
+  const redirectUri = `${protocol}://${host}/admin/callback.html`;
   const scope = 'repo';
 
   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code${state ? `&state=${state}` : ''}`;
