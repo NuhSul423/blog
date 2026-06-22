@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const clientId = 'Ov23li1pLAV6fyLXMBP5';
+  const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
 
   const postData = JSON.stringify({
