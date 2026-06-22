@@ -1,7 +1,7 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  const { code, provider, code_challenge, state } = event.queryStringParameters || {};
+  const { code, provider } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
     return await exchangeCodeForToken(code);
@@ -11,22 +11,16 @@ exports.handler = async (event, context) => {
   const redirectUri = `${event.headers.origin}/admin/`;
   const scope = 'repo';
 
-  let authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code`;
-  
-  if (code_challenge) {
-    authUrl += `&code_challenge=${code_challenge}&code_challenge_method=S256`;
-  }
-  
-  if (state) {
-    authUrl += `&state=${state}`;
-  }
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code`;
 
   return {
-    statusCode: 302,
+    statusCode: 200,
     headers: {
-      Location: authUrl,
-      'Cache-Control': 'no-cache'
-    }
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      authorize_url: authUrl
+    })
   };
 };
 
@@ -64,38 +58,33 @@ async function exchangeCodeForToken(code) {
           if (result.error) {
             resolve({
               statusCode: 400,
+              headers: {
+                'Content-Type': 'application/json'
+              },
               body: JSON.stringify({ error: result.error_description || result.error })
             });
             return;
           }
 
-          const script = `
-            <script>
-              (function() {
-                var opener = window.opener || window.parent;
-                opener.postMessage({
-                  type: 'authorization',
-                  provider: 'github',
-                  token: '${result.access_token}',
-                  token_type: '${result.token_type || 'bearer'}',
-                  expires_in: ${result.expires_in || 3600},
-                  scope: '${result.scope || 'repo'}'
-                }, '*');
-                window.close();
-              })();
-            </script>
-          `;
-
           resolve({
             statusCode: 200,
             headers: {
-              'Content-Type': 'text/html'
+              'Content-Type': 'application/json'
             },
-            body: script
+            body: JSON.stringify({
+              provider: 'github',
+              token: result.access_token,
+              token_type: result.token_type || 'bearer',
+              expires_in: result.expires_in || 3600,
+              scope: result.scope || 'repo'
+            })
           });
         } catch (error) {
           resolve({
             statusCode: 500,
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ error: error.message })
           });
         }
@@ -105,6 +94,9 @@ async function exchangeCodeForToken(code) {
     githubReq.on('error', (error) => {
       resolve({
         statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ error: error.message })
       });
     });
