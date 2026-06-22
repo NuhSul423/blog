@@ -1,12 +1,8 @@
 backend:
-  name: github
+  name: git-gateway
   repo: NuhSul423/blog
   branch: main
-  auth_type: oauth
-  oauth:
-    authorize_url: https://github.com/login/oauth/authorize
-    token_url: https://github.com/login/oauth/access_token
-  auth_endpoint: .netlify/functions/auth
+  auth_type: implicit
 
 publish_mode: editorial_workflow
 media_folder: source/uploads
