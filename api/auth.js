@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   const { code, provider, state } = event.queryStringParameters || {};
 
   if (provider === 'github' && code) {
-    return await exchangeCodeForToken(code);
+    return await exchangeCodeForToken(code, event);
   }
 
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -29,14 +29,19 @@ exports.handler = async (event, context) => {
   };
 };
 
-async function exchangeCodeForToken(code) {
+async function exchangeCodeForToken(code, event) {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+  const host = event.headers.host || event.headers['x-forwarded-host'] || 'super-meringue-6c70e2.netlify.app';
+  const protocol = event.headers['x-forwarded-proto'] || 'https';
+  const redirectUri = `${protocol}://${host}/admin/`;
 
   const postData = JSON.stringify({
     client_id: clientId,
     client_secret: clientSecret,
-    code: code
+    code: code,
+    redirect_uri: redirectUri
   });
 
   const options = {

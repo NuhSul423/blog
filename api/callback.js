@@ -11,11 +11,15 @@ module.exports = async (req, res) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
 
+  const host = req.headers.host || req.headers['x-forwarded-host'];
+  const protocol = req.headers['x-forwarded-proto'] || 'https';
+  const redirectUri = host ? `${protocol}://${host}/admin/` : 'https://super-meringue-6c70e2.netlify.app/admin/';
+
   const postData = JSON.stringify({
     client_id: clientId,
     client_secret: clientSecret,
     code: code,
-    redirect_uri: 'https://super-meringue-6c70e2.netlify.app/admin/'
+    redirect_uri: redirectUri
   });
 
   const options = {
