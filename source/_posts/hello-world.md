@@ -2,6 +2,10 @@
 title: hello-world
 date: 2024-2-26 13:56:18
 tag: 测试
+categories:
+  - test
+tags:
+  - test
 ---
 
 博客在source/_post下。
