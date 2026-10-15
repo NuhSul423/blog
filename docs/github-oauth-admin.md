@@ -118,3 +118,29 @@ curl -s "https://super-meringue-6c70e2.netlify.app/api/callback?code=test" | hea
 | 后台提示登录失败、弹窗自动关闭 | 弹窗与后台不同域，或 `config.yml` 的 `base_url` 与访问地址不一致 |
 | 回调页提示缺少 `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Netlify 环境变量没配或没重新部署 |
 | 回调页提示 `The client_id and/or client_secret passed are incorrect` | Netlify 上的 `GITHUB_CLIENT_SECRET` 与 OAuth App 当前的 Client secret 不一致（secret 重新生成过，或粘贴时带了空格/换行）。GitHub 会先校验客户端凭据再校验 code，所以 code 无效时也是这条报错 |
+
+## 五、为什么强制使用原始 Markdown 编辑器
+
+`static/admin/config.yml` 里所有 `widget: markdown` 的字段都加了 `modes: ['raw']`。
+
+原因：`netlify-cms@2.10.192` 的富文本编辑器是 Slate 那套，它有两个要命的地方：
+
+1. 内容通过 `debounce(..., 150)` 才提交给 entry（`MarkdownControl` 的
+   `handleDocumentChange`），编辑器里看到的字和 entry 里的值会短暂不一致；
+2. Slate 这一代对**中文输入法组合输入（IME）**支持很差，`测试` 这类通过输入法
+   上屏的文字经常没有进入 Slate 的文档状态，于是提交给 entry 的是空字符串。
+
+结果就是保存时校验（ajv 的 `required`，文案模板
+`"%{fieldLabel} is required."`）判定 `body` 为空，界面报
+「内容 IS REQUIRED」—— 但编辑器里明明有字。这属于编辑器缺陷，不是配置写错，
+所以用 `modes: ['raw']` 直接换成 CodeMirror 原始编辑器（每次输入同步 onChange，
+没有 IME 问题，也自带实时预览）。
+
+想换回富文本编辑器：把 `modes: ['raw']` 改成 `modes: ['rich_text', 'raw']`
+（或整段删掉，默认就是 `rich_text`）。编辑器当前选择存在浏览器
+`localStorage` 的 `cms.md-mode` 键里，默认值是 `rich_text`。
+
+如果哪天想彻底升级，可以考虑把 `static/admin/index.html` 里的
+`netlify-cms@2.10.192` 换成 `@sveltia/cms`（兼容同一份 `config.yml` 和同一套
+GitHub OAuth，富文本改用 Lexical）—— 但它对 OAuth 握手的实现需要重新验证。
+

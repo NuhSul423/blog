@@ -28,7 +28,11 @@ collections:
       - { label: '日期', name: 'date', widget: 'datetime' }
       - { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] }
       - { label: '标签', name: 'tags', widget: 'list' }
-      - { label: '内容', name: 'body', widget: 'markdown' }
+      # modes: ['raw'] 强制使用原始 Markdown 编辑器。
+      # netlify-cms 2.x 的富文本（rich_text / Slate）编辑器在中文输入法组合输入
+      # 时经常不把内容提交进 entry，保存时会误报「内容 IS REQUIRED」。
+      # 想换回富文本编辑器，把这里改成 modes: ['rich_text', 'raw']。
+      - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
 
   - name: 'page'
     label: '页面'
@@ -38,16 +42,16 @@ collections:
         file: 'source/about/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown' }
+          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
       - label: '链接页面'
         name: 'link'
         file: 'source/link/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown' }
+          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
       - label: '工具页面'
         name: 'tools'
         file: 'source/tools/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown' }
+          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
