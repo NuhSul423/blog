@@ -289,6 +289,17 @@ exports.handler = async (event) => {
       return errorPage('换取 access_token 失败', reason + hintFor(result.error));
     }
 
+    if (result.expires_in || result.refresh_token) {
+      // 2026-08 起 GitHub 允许 OAuth App 签发 8 小时有效期的短期 token，
+      // 而 netlify-cms 2.x 不支持 refresh token，后台会每隔 8 小时失效一次。
+      console.warn(
+        '[blog-cms-oauth] GitHub 返回了带有效期的 access_token（expires_in=%s）。' +
+          '请在 OAuth App 的 Optional features 里取消勾选 "Expire user authorization tokens"，' +
+          '否则每 8 小时需要重新登录一次。',
+        result.expires_in,
+      );
+    }
+
     return successPage(result.access_token);
   } catch (err) {
     return errorPage('换取 access_token 失败', (err && err.message) || String(err));

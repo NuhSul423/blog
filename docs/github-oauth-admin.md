@@ -45,18 +45,42 @@
 
 ### 1. GitHub OAuth App
 
-GitHub → 右上角头像 → Settings → Developer settings → OAuth Apps →
-你的应用：
+GitHub → 右上角头像 → Settings → Developer settings → OAuth Apps → 你的应用。
+（GitHub 在 2026-08 更新过 OAuth App 的设置界面，字段名和下面一致即可对上。）
 
-- **Authorization callback URL** 必须是：
+**a) Redirect URI**
 
-  ```
-  https://super-meringue-6c70e2.netlify.app/api/callback
-  ```
+新界面里叫 **Redirect URIs**（可加多条，按钮 `Add redirect URI`），必须填写：
 
-  填成站点根路径或 `/admin/` 都会导致 GitHub 报
-  `The redirect_uri is not associated with this application`，
-  或者授权后弹窗停在一个空白页面上。
+```
+https://super-meringue-6c70e2.netlify.app/api/callback
+```
+
+填成站点根路径（`https://super-meringue-6c70e2.netlify.app`）或 `/admin/` 都会导致
+GitHub 报 `The redirect_uri is not associated with this application`，
+或者授权后弹窗停在一个空白页面 / 博客首页上。
+
+同时建议**取消勾选 `Allow wildcard matching`**：只注册一条地址时 GitHub 会沿用
+"通配符匹配"的旧行为，允许把 token 发到该地址的任意子域和子路径，不需要就别开。
+
+**b) 关闭短期 token（重要）**
+
+在新界面的 **Optional features** 区域，取消勾选 `Expire user authorization tokens`
+（文案类似 "User authorization tokens expire"）。
+
+GitHub 现在对**新建的 OAuth App 默认开启**该选项：access token 只有 **8 小时**
+有效期，另发一个 6 个月有效的 refresh token。而 `netlify-cms@2.10.192` 只会把
+token 存下来、**不支持 refresh**，开着这个选项后台每 8 小时就要重新登录一次。
+
+如果一时没关，`api/callback.js` 会在 Netlify 的函数日志里打印一条告警
+（关键词 `expire user authorization tokens`），不会静默失败。
+
+**c) Client secret**
+
+页面下方 **Client secrets** → `Generate a new client secret`，生成后立即复制，
+填到下面的 Netlify 环境变量里。GitHub 的 token 接口会**先校验客户端凭据、再校验
+code**，所以 secret 不对时报的是含糊的
+`The client_id and/or client_secret passed are incorrect`。
 
 ### 2. Netlify 环境变量
 
