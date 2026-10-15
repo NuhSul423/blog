@@ -19,12 +19,23 @@ publish_mode: editorial_workflow
 media_folder: source/uploads
 public_folder: /uploads
 
+# 条目文件名（slug）的全局规则，两个前端都识别这组选项：
+#   encoding: unicode —— 文件名保留中文，不做拉丁化
+#   timezone: local   —— 文件名里的日期用本地时区；默认按 UTC，
+#                        半夜写文章会出现文件名日期差一天
+slug:
+  encoding: unicode
+  timezone: local
+
 collections:
   - name: 'post'
     label: '文章'
     folder: 'source/_posts'
     create: true
-    slug: ':year-:month-:day-:title'
+    # 必须用 {{...}} 语法。Netlify CMS 时代的旧写法
+    # ':year-:month-:day-:title' 不会被求值，会被当成字面字符串拼进分支名，
+    # 保存时报 'refs/heads/cms/post/:year-:month-:day-:title is not a valid ref name'。
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
     fields:
       - { label: '标题', name: 'title', widget: 'string' }
       - { label: '日期', name: 'date', widget: 'datetime' }

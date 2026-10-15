@@ -158,6 +158,14 @@ Sveltia CMS 正是为修复这一类问题而做的：编辑器换成 **Lexical*
 * Sveltia 仍是 0.x（beta），所以我们**固定版本号**而不是用 `@latest`；
   升级时改 `static/admin/index.html` 里的版本号即可。
 * Sveltia 会**标记必填字段**（旧版标记可选字段），只是视觉差异。
+* **`slug` 必须用 `{{...}}` 新语法**。Netlify CMS 时代的
+  `:year-:month-:day-:title` 不会被求值，会被当成字面字符串拼进 editorial
+  workflow 的分支名，保存时报
+  `"refs/heads/cms/post/:year-:month-:day-:title" is not a valid ref name`。
+  已改为 `'{{year}}-{{month}}-{{day}}-{{slug}}'`，可用标签见
+  <https://sveltiacms.app/en/docs/collections/entries/slugs>。
+  同时新增全局 `slug: { encoding: unicode, timezone: local }`：
+  文件名保留中文、日期按本地时区（默认 UTC，半夜写文章会差一天）。
 * 空的可选字段默认不再被省略。若发现 front matter 里出现多余的
   `tags:` 空行，可加 `output: { omit_empty_optional_fields: true }`。
 * 之前为了绕开 Slate 加的 `modes: ['raw']` 已删除（Sveltia 不使用该选项）。
