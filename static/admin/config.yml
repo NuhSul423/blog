@@ -1,10 +1,17 @@
+# 登录流程（GitHub OAuth）：
+#   /admin/ 打开弹窗 → /api/auth 302 跳转 GitHub → 用户授权
+#   → GitHub 回跳 /api/callback 换取 token → postMessage 握手回到后台
+#
+# 注意：base_url 必须和管理后台的访问地址完全一致，
+# netlify-cms 会校验 postMessage 的来源 origin 等于 base_url。
+# 因此请始终使用 https://super-meringue-6c70e2.netlify.app/admin/ 访问后台，
+# 不要用 main--super-meringue-6c70e2.netlify.app 之类的分支别名。
 backend:
   name: github
   repo: NuhSul423/blog
   branch: main
-  auth_type: oauth
-  auth_endpoint: /api/auth
   base_url: https://super-meringue-6c70e2.netlify.app
+  auth_endpoint: api/auth
 
 publish_mode: editorial_workflow
 media_folder: source/uploads

@@ -1,16 +1,26 @@
 [build]
   command = "npm run build"
   publish = "public"
-  functions = "api"
+
+# Decap / Netlify CMS 的 OAuth 函数目录（默认是 netlify/functions）
+[functions]
+  directory = "api"
 
 [[redirects]]
   from = "/admin/*"
   to = "/admin/:splat"
   status = 200
 
+# 登录第 1 步：把弹窗重定向到 GitHub 授权页
 [[redirects]]
   from = "/api/auth"
   to = "/.netlify/functions/auth"
+  status = 200
+
+# 登录第 2 步：GitHub 回跳，换取 access_token 并完成 postMessage 握手
+[[redirects]]
+  from = "/api/callback"
+  to = "/.netlify/functions/callback"
   status = 200
 
 [[headers]]
