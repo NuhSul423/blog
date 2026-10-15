@@ -280,11 +280,12 @@ exports.handler = async (event) => {
     });
 
     if (result.error || !result.access_token) {
+      // 去掉英文描述结尾的句点，避免和后面的中文提示粘成 "incorrect.。这说明"
       const reason = firstDefined(
         result.error_description,
         result.error,
         'GitHub 未返回 access_token',
-      );
+      ).replace(/[.\s]+$/, '');
       return errorPage('换取 access_token 失败', reason + hintFor(result.error));
     }
 
