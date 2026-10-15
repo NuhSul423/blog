@@ -36,9 +36,22 @@ function firstDefined() {
   return '';
 }
 
+/**
+ * 取环境变量的值并去掉首尾空白。
+ * 从 Netlify 界面粘贴 client secret 时很容易带上换行，
+ * 而 GitHub 只会回一句含糊的 "client_id and/or client_secret passed are incorrect"。
+ */
+function envValue() {
+  for (let i = 0; i < arguments.length; i += 1) {
+    const value = arguments[i];
+    if (value && String(value).trim()) return String(value).trim();
+  }
+  return '';
+}
+
 /** 站点自身的 origin，必须和 /api/auth 里用的是同一个值，否则换 token 时会 redirect_uri 不匹配。 */
 function siteOrigin(event) {
-  const configured = firstDefined(
+  const configured = envValue(
     process.env.SITE_ORIGIN,
     process.env.URL,
     process.env.DEPLOY_PRIME_URL,
@@ -153,6 +166,22 @@ function handshakePage(message, heading, detail) {
   );
 }
 
+/** 把 GitHub 含糊的错误码翻译成可操作的提示。 */
+function hintFor(errorCode) {
+  if (errorCode === 'incorrect_client_credentials') {
+    return '。这说明 Netlify 上的 GITHUB_CLIENT_SECRET 与 GitHub OAuth App 当前的 ' +
+      'Client secret 不一致：请在 OAuth App 页面重新生成 secret，复制到 Netlify 的 ' +
+      'Environment variables 更新 GITHUB_CLIENT_SECRET，然后重新部署';
+  }
+  if (errorCode === 'redirect_uri_mismatch') {
+    return '。GitHub OAuth App 的 Authorization callback URL 必须填本站的 /api/callback';
+  }
+  if (errorCode === 'bad_verification_code') {
+    return '。授权码已被使用或过期，请回到管理后台重新点击登录';
+  }
+  return '';
+}
+
 function successPage(token) {
   const payload = { token: token, provider: PROVIDER };
   return handshakePage(
@@ -225,11 +254,11 @@ exports.handler = async (event) => {
     return errorPage('回调缺少 code 参数', 'GitHub 没有带回授权码，请回到管理后台重新登录。');
   }
 
-  const clientId = firstDefined(
+  const clientId = envValue(
     process.env.GITHUB_CLIENT_ID,
     process.env.OAUTH_GITHUB_CLIENT_ID,
   );
-  const clientSecret = firstDefined(
+  const clientSecret = envValue(
     process.env.GITHUB_CLIENT_SECRET,
     process.env.OAUTH_GITHUB_CLIENT_SECRET,
   );
@@ -251,10 +280,12 @@ exports.handler = async (event) => {
     });
 
     if (result.error || !result.access_token) {
-      return errorPage(
-        '换取 access_token 失败',
-        firstDefined(result.error_description, result.error, 'GitHub 未返回 access_token'),
+      const reason = firstDefined(
+        result.error_description,
+        result.error,
+        'GitHub 未返回 access_token',
       );
+      return errorPage('换取 access_token 失败', reason + hintFor(result.error));
     }
 
     return successPage(result.access_token);

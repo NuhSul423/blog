@@ -93,3 +93,4 @@ curl -s "https://super-meringue-6c70e2.netlify.app/api/callback?code=test" | hea
 | `redirect_uri is not associated with this application` | 同上，回调地址与请求里的 `redirect_uri` 不一致 |
 | 后台提示登录失败、弹窗自动关闭 | 弹窗与后台不同域，或 `config.yml` 的 `base_url` 与访问地址不一致 |
 | 回调页提示缺少 `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Netlify 环境变量没配或没重新部署 |
+| 回调页提示 `The client_id and/or client_secret passed are incorrect` | Netlify 上的 `GITHUB_CLIENT_SECRET` 与 OAuth App 当前的 Client secret 不一致（secret 重新生成过，或粘贴时带了空格/换行）。GitHub 会先校验客户端凭据再校验 code，所以 code 无效时也是这条报错 |

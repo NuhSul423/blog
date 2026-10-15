@@ -34,12 +34,25 @@ function firstDefined() {
 }
 
 /**
+ * 取环境变量的值并去掉首尾空白。
+ * 从 Netlify 界面粘贴 client secret 时很容易带上换行，
+ * 而 GitHub 只会回一句含糊的 "client_id and/or client_secret passed are incorrect"。
+ */
+function envValue() {
+  for (let i = 0; i < arguments.length; i += 1) {
+    const value = arguments[i];
+    if (value && String(value).trim()) return String(value).trim();
+  }
+  return '';
+}
+
+/**
  * 站点自身的 origin，用来拼装回调地址。
  * 优先使用 Netlify 注入的环境变量，而不是请求头里的 Host —— Host 可以被伪造，
  * 用它拼 redirect_uri 等于开放重定向。
  */
 function siteOrigin(event) {
-  const configured = firstDefined(
+  const configured = envValue(
     process.env.SITE_ORIGIN,
     process.env.URL,
     process.env.DEPLOY_PRIME_URL,
@@ -73,7 +86,7 @@ function htmlPage(statusCode, title, detail) {
 }
 
 exports.handler = async (event) => {
-  const clientId = firstDefined(
+  const clientId = envValue(
     process.env.GITHUB_CLIENT_ID,
     process.env.OAUTH_GITHUB_CLIENT_ID,
   );
