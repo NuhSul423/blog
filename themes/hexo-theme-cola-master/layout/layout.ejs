@@ -124,6 +124,43 @@
     </p>
   </div>
   <div id="container" class="container w-100 vh-100" style="display: none;">
+    <!-- 角色层与粒子层：纯装饰，独立于内容流 -->
+    <div class="char-layer" aria-hidden="true"><div class="char-layer__inner"></div></div>
+    <div class="fx-layer" aria-hidden="true">
+      <i class="fx-star" style="left: 12%; --dur: 13s; --delay: 0s;   --sz: 3px"></i>
+      <i class="fx-star" style="left: 44%; --dur: 17s; --delay: 4.2s; --sz: 2px"></i>
+      <i class="fx-star" style="left: 71%; --dur: 15s; --delay: 2.1s; --sz: 4px"></i>
+      <i class="fx-star" style="left: 88%; --dur: 19s; --delay: 6.4s; --sz: 2px"></i>
+      <%# 雪花结晶：大小、速度、透明度、横摆、旋转都刻意不均匀，接近自然降雪 %>
+      <% for (let i = 0; i < 15; i++) { %>
+        <i class="fx-flake" style="left: <%= ((i * 6.7 + (i % 4) * 3.1) % 100).toFixed(1) %>%;
+          --sz: <%= (9 + (i % 5) * 3) %>px;
+          --dur: <%= (16 + (i % 6) * 2.4).toFixed(1) %>s;
+          --delay: -<%= (i * 1.9).toFixed(1) %>s;
+          --op: <%= (0.20 + (i % 5) * 0.11).toFixed(2) %>;
+          --sway: <%= ((i % 3) - 1) * 26 %>px;
+          --rot: <%= (i % 2 ? -1 : 1) * (90 + (i % 4) * 45) %>deg"></i>
+      <% } %>
+      <%# 细雪点，制造纵深 %>
+      <% for (let i = 0; i < 24; i++) { %>
+        <i class="fx-dot" style="left: <%= ((i * 4.1 + (i % 7) * 2.3) % 100).toFixed(1) %>%;
+          --sz: <%= (2 + (i % 3)) %>px;
+          --dur: <%= (11 + (i % 7) * 1.8).toFixed(1) %>s;
+          --delay: -<%= (i * 1.3).toFixed(1) %>s;
+          --op: <%= (0.16 + (i % 6) * 0.09).toFixed(2) %>;
+          --sway: <%= ((i % 5) - 2) * 14 %>px"></i>
+      <% } %>
+      <%# 大雪花：可点击，点碎成小雪花（见页面底部脚本） %>
+      <% for (let i = 0; i < 5; i++) { %>
+        <i class="fx-flake fx-flake--big" style="left: <%= (9 + i * 19) %>%;
+          --sz: <%= (34 + (i % 3) * 9) %>px;
+          --dur: <%= (26 + (i % 4) * 4) %>s;
+          --delay: -<%= (i * 4.3).toFixed(1) %>s;
+          --op: <%= (0.48 + (i % 3) * 0.12).toFixed(2) %>;
+          --sway: <%= ((i % 2) ? 1 : -1) * (30 + (i % 3) * 10) %>px;
+          --rot: <%= (i % 2 ? -1 : 1) * (150 + (i % 3) * 60) %>deg"></i>
+      <% } %>
+    </div>
     <%- partial('_partial/header', null, { cache: !config.relative_link }) %> 
     <section id="main" class="main">
       <div class="main-left-wrapper"><%- partial('_partial/main-left', null, { cache: !config.relative_link }) %></div>
@@ -133,6 +170,7 @@
   </div>
   <div id="progress" class="progress"></div>
   <div id="gray" class="gray"></div>
+  <div class="cursor-layer" aria-hidden="true"></div>
 
   <script>
     function initScroll () {
@@ -209,6 +247,115 @@
       status = -1
       checkAndSetArticlePageLayout()
     });
+  </script>
+
+  <script>
+    /* 角色层视差：跟随鼠标 + 页面滚动，让立绘和背景产生层次 */
+    (function () {
+      var layer = document.querySelector('.char-layer')
+      if (!layer) return
+      var tx = 0, ty = 0, cx = 0, cy = 0
+      document.addEventListener('mousemove', function (e) {
+        tx = (e.clientX / window.innerWidth - .5) * 2
+        ty = (e.clientY / window.innerHeight - .5) * 2
+      }, { passive: true })
+      ;(function loop () {
+        cx += (tx - cx) * .07
+        cy += (ty - cy) * .07
+        var sy = window.pageYOffset || document.documentElement.scrollTop || 0
+        layer.style.transform =
+          'translate3d(' + (cx * -30).toFixed(1) + 'px,' + (cy * -10 - sy * .03).toFixed(1) + 'px,0)'
+        requestAnimationFrame(loop)
+      })()
+    })()
+  </script>
+
+  <script>
+    /* 鼠标指针粒子：光标划过时散出星芒/雪花，纯装饰
+       用对象池 + Web Animations API，避免频繁创建 DOM 造成卡顿 */
+    (function () {
+      var layer = document.querySelector('.cursor-layer')
+      if (!layer) return
+      if (window.matchMedia && window.matchMedia('(hover: none)').matches) return   // 触屏设备不做
+      var POOL = 22, items = [], idx = 0, last = 0, lx = 0, ly = 0
+      for (var i = 0; i < POOL; i++) {
+        var el = document.createElement('i')
+        el.className = 'cursor-spark' + (i % 2 ? ' cursor-spark--flake' : '')
+        layer.appendChild(el)
+        items.push(el)
+      }
+      document.addEventListener('mousemove', function (e) {
+        var now = Date.now()
+        var dx = e.clientX - lx, dy = e.clientY - ly
+        // 限频 + 限距：间隔太短或位移太小就不生成，避免糊成一团
+        if (now - last < 26 || dx * dx + dy * dy < 110) return
+        last = now; lx = e.clientX; ly = e.clientY
+        var el = items[idx = (idx + 1) % POOL]
+        var size = 6 + Math.random() * 8
+        var rot = Math.random() * 220 - 110
+        el.style.left = (e.clientX + (Math.random() - .5) * 12).toFixed(1) + 'px'
+        el.style.top = (e.clientY + (Math.random() - .5) * 12).toFixed(1) + 'px'
+        el.style.width = el.style.height = size.toFixed(1) + 'px'
+        if (el.__anim) el.__anim.cancel()
+        el.__anim = el.animate([
+          { transform: 'translate(-50%,-50%) scale(.45) rotate(0deg)', opacity: 0 },
+          { transform: 'translate(-50%,-50%) scale(1) rotate(' + (rot * .35).toFixed(0) + 'deg)', opacity: 1, offset: .22 },
+          { transform: 'translate(-50%,-50%) scale(.15) rotate(' + rot.toFixed(0) + 'deg) translateY(16px)', opacity: 0 }
+        ], {
+          duration: 620 + Math.random() * 420,
+          easing: 'cubic-bezier(.22,.61,.36,1)',
+          fill: 'forwards'
+        })
+      }, { passive: true })
+    })()
+  </script>
+
+  <script>
+    /* 大雪花交互：点击后"碎"成小雪花四散，随后重新从顶部飘落
+       碎片复用指针粒子的素材与样式（对象池 + Web Animations API） */
+    (function () {
+      var fx = document.querySelector('.fx-layer')
+      if (!fx) return
+      var SHARDS = 40, pool = [], idx = 0
+      var host = document.querySelector('.cursor-layer') || fx
+      for (var i = 0; i < SHARDS; i++) {
+        var s = document.createElement('i')
+        s.className = 'cursor-spark cursor-spark--flake'
+        host.appendChild(s)
+        pool.push(s)
+      }
+      function burst (x, y) {
+        for (var k = 0; k < 10; k++) {
+          var s = pool[idx = (idx + 1) % SHARDS]
+          if (s.__anim) s.__anim.cancel()
+          var ang = (k / 10) * Math.PI * 2 + Math.random() * .5
+          var dist = 26 + Math.random() * 54
+          var sz = 5 + Math.random() * 7
+          s.style.left = x + 'px'
+          s.style.top = y + 'px'
+          s.style.width = s.style.height = sz.toFixed(1) + 'px'
+          s.__anim = s.animate([
+            { transform: 'translate(-50%,-50%) scale(.3)', opacity: 0 },
+            { transform: 'translate(-50%,-50%) scale(1)', opacity: 1, offset: .2 },
+            { transform: 'translate(-50%,-50%) translate(' + (Math.cos(ang) * dist).toFixed(0) + 'px,' +
+              (Math.sin(ang) * dist + 26).toFixed(0) + 'px) scale(.35) rotate(' +
+              (Math.random() * 260 - 130).toFixed(0) + 'deg)', opacity: 0 }
+          ], { duration: 720 + Math.random() * 420, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'forwards' })
+        }
+      }
+      fx.addEventListener('click', function (e) {
+        var t = e.target
+        if (!t.classList || !t.classList.contains('fx-flake--big')) return
+        var r = t.getBoundingClientRect()
+        burst(r.left + r.width / 2, r.top + r.height / 2)
+        t.style.animation = 'none'                       // 立刻消失（回到 base 的屏幕外 + opacity:0）
+        setTimeout(function () {                         // 过几秒换个位置重新飘落
+          t.style.left = (Math.random() * 90 + 4).toFixed(1) + '%'
+          t.style.width = t.style.height = (34 + Math.random() * 22).toFixed(0) + 'px'
+          t.style.animation = ''
+        }, 2400 + Math.random() * 2600)
+      })
+    })()
   </script>
 </body>
 </html>

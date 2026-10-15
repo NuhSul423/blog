@@ -1,0 +1,551 @@
+/* ==========================================================================
+   角色主题 · 配色与装饰覆盖层
+   --------------------------------------------------------------------------
+   角色：银白长发 · 蓝瞳 · 黑金与白蓝紫两套服装
+   配色取自 D:\图片\三视图 里的实际像素：
+     星空底色 #33333c / #3a3943      主紫 #8e6b9a
+     亮紫     #b683d6 / #c394d5      哑光金 #9d773e / 亮金 #c9a259
+     银白     #f5f1f9                冰蓝   #9fd0e8
+   本文件在 layout.css 之后加载，用于覆盖主题原有的蓝/红/橙/绿配色，
+   不改动原主题文件，便于随时回退。
+   ========================================================================== */
+
+/* ---------- 基础文字与背景 ---------- */
+body {
+  color: #3b3346;
+}
+
+a {
+  color: #3b3346;
+}
+
+input {
+  color: #4a4157;
+  border: 1px solid #e4dcf0;
+  background-color: #fbf9fe;
+}
+
+/* 页面背景：项目原本的壁纸（角色已抹除、天空已补），缓慢漂移制造视差 */
+.container {
+  background-color: #1a1426;
+  background-image: url('/imgs/bg-sky.jpeg');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-attachment: fixed;
+  animation: skyDrift 45s ease-in-out infinite alternate;
+}
+
+/* 全屏淡紫暗角，制造纵深（放在内容之下、背景之上） */
+.container::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(196, 148, 213, .16), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(24, 18, 34, .55), transparent 60%);
+  animation: glowBreathe 8s ease-in-out infinite alternate;
+}
+
+/* ---------- 顶栏 ---------- */
+.header {
+  box-shadow: 0 2px 14px rgba(24, 16, 34, .55);
+  border-bottom: 1px solid rgba(201, 162, 89, .38);
+}
+
+.header::after {
+  opacity: 1;
+  background-image:
+    url('/imgs/orn/orn-edge.svg'),
+    radial-gradient(circle at 50% 130%, rgba(196, 148, 213, .40), transparent 62%),
+    linear-gradient(180deg, #322641 0%, #251e33 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center bottom, center center, center center;
+  background-size: 100% 16px, cover, cover;
+}
+
+.header-menu > li > a {
+  color: #f7f2fb;
+  text-shadow: 0 1px 4px rgba(20, 12, 30, .75);
+}
+
+/* 顶栏菜单 hover 下划线：改成金色 */
+.header-menu > li::after {
+  background-color: #c9a259;
+  box-shadow: 0 0 8px rgba(201, 162, 89, .8);
+}
+
+.header-search--input {
+  background-color: rgba(255, 255, 255, .92);
+  border-color: rgba(196, 148, 213, .45);
+}
+
+.header-search--icon {
+  background-color: #8e6b9a;
+  border-color: #8e6b9a;
+  color: #fff;
+}
+
+.header-search--layer {
+  background-color: #fdfcff;
+  box-shadow: 0 8px 24px rgba(60, 40, 90, .28);
+}
+
+.header-search--layer .title span:last-child,
+.header-search--layer li a span {
+  color: #8e6b9a;
+}
+
+/* ---------- 卡片：白底改成带紫调的柔光卡 ---------- */
+.main-left--block,
+.main-right--board,
+.main-right--site,
+.operate-item {
+  background-color: rgba(253, 251, 255, .94);
+  box-shadow: 0 4px 18px rgba(72, 48, 104, .22);
+  border: 1px solid rgba(196, 148, 213, .22);
+}
+
+/* ---------- 左侧栏 ---------- */
+.main-left--info {
+  background-image:
+    url('/imgs/orn/orn-stars.svg'),
+    radial-gradient(circle at 14% 22%, rgba(196, 148, 213, .45), transparent 58%),
+    linear-gradient(120deg, #3b2c4e 0%, #241d31 74%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 200px 200px, cover, cover;
+  background-position: center center, center center, center center;
+}
+
+/* 原主题把姓名设成 20px，在 200px 宽的卡片里会顶到头像上，这里收紧排版 */
+.main-left--avatar {
+  flex: 0 0 auto;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 0 10px rgba(196, 148, 213, .75));
+}
+
+.main-left--intro {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.main-left--name {
+  max-width: 100%;
+  font-size: 13px;
+  line-height: 1.3;
+  color: #f7f2fb;
+  text-shadow: 0 1px 4px rgba(20, 12, 30, .8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-left--tags {
+  margin-top: 4px;
+}
+
+.main-left--tag:nth-child(1) {
+  background-color: #8e6b9a;
+}
+
+.main-left--tag:nth-child(2) {
+  background-color: #9d773e;
+}
+
+.main-left--motto {
+  text-shadow: 0 1px 3px rgba(60, 45, 80, .35);
+  color: #55496a;
+}
+
+/* 分类 / 标签 / 归档三个色块：紫 → 金 → 冰蓝 */
+.main-left--statics > a:nth-child(1) > div {
+  background: linear-gradient(135deg, #8e6b9a, #b683d6);
+}
+
+.main-left--statics > a:nth-child(2) > div {
+  background: linear-gradient(135deg, #9d773e, #c9a259);
+}
+
+.main-left--statics > a:nth-child(3) > div {
+  background: linear-gradient(135deg, #6f7fa8, #9fd0e8);
+}
+
+.main-left--statics > a:hover {
+  box-shadow: 0 0 0 2px rgba(201, 162, 89, .7) inset;
+}
+
+.main-left--github .logo {
+  color: #8e6b9a;
+}
+
+.main-left--github .line {
+  background-color: rgba(142, 107, 154, .35);
+}
+
+.main-left--menu > li > a:hover {
+  color: #8e6b9a;
+}
+
+.main-left--menu > li::after,
+.main-left--menu > li::before {
+  background-color: #b683d6;
+}
+
+.main-left--title {
+  color: #4a3d5c;
+}
+
+/* ---------- 右侧栏 ---------- */
+.main-right--title {
+  border-bottom: 1px dashed rgba(142, 107, 154, .45);
+  color: #4a3d5c;
+}
+
+.main-right--board .main-right--content,
+.main-right--site {
+  color: #55496a;
+}
+
+/* ---------- 回到顶部 / 评论按钮 ---------- */
+.operate-item {
+  color: #55496a;
+}
+
+.operate-item.backtop::after {
+  background: linear-gradient(135deg, #8e6b9a, #c394d5);
+}
+
+.operate-item.turn-comment::after {
+  background: linear-gradient(135deg, #9d773e, #c9a259);
+}
+
+/* ---------- 评论区 ---------- */
+.comments-intro {
+  background-color: rgba(238, 230, 247, .9);
+  border: 1px solid rgba(196, 148, 213, .3);
+}
+
+.comments-intro h2 {
+  color: #8e6b9a;
+}
+
+.comments-intro p {
+  color: #6b5f7d;
+}
+
+/* ---------- 配饰纹样的界面应用 ---------- */
+
+/* 站点信息 / 公告栏标题：用金线小十字分隔线 */
+.main-left--title,
+.main-right--title {
+  border-bottom: none;
+  padding-bottom: 16px;
+  background-image: url('/imgs/orn/orn-divider.svg');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 100% 14px;
+}
+
+/* 侧栏姓名前的小纹章 */
+.main-left--name::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  vertical-align: -2px;
+  background: url('/imgs/orn/orn-crest.svg') no-repeat center / contain;
+}
+
+/* 评论区角落的缎带水印 */
+.comments-intro {
+  position: relative;
+  overflow: hidden;
+}
+
+.comments-intro::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: -16px;
+  width: 116px;
+  height: 78px;
+  background: url('/imgs/orn/orn-ribbon.svg') no-repeat center / contain;
+  opacity: .32;
+  pointer-events: none;
+}
+
+/* 加载页：星空底纹 + 紫金双环 */
+#load.load {
+  background-color: #191322;
+  background-image: url('/imgs/orn/orn-stars.svg');
+  background-size: 165px 165px;
+}
+
+/* ==========================================================================
+   动效层
+   ========================================================================== */
+
+/* 角色层：独立元素，才能同时叠加"漂浮动画"与"鼠标/滚动视差" */
+.char-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+}
+
+.char-layer__inner {
+  position: absolute;
+  right: 0;
+  bottom: -3vh;
+  width: min(46vw, 900px);
+  height: min(92vh, 960px);
+  background: url('/imgs/char.webp') no-repeat right bottom / contain;
+  animation: charFloat 7s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 32px rgba(150, 108, 200, .6));
+}
+
+/* 上升的光点粒子 */
+.fx-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.fx-star {
+  position: absolute;
+  bottom: -24px;
+  width: var(--sz, 3px);
+  height: var(--sz, 3px);
+  border-radius: 50%;
+  background: #e9dcf7;
+  box-shadow: 0 0 10px 3px rgba(196, 148, 213, .85);
+  opacity: 0;
+  animation: starRise var(--dur, 14s) linear var(--delay, 0s) infinite;
+}
+
+/* 雪花结晶（按参考图：六角结晶，白/冰蓝柔光，大小疏密不均） */
+.fx-flake {
+  position: absolute;
+  top: -8vh;
+  width: var(--sz, 12px);
+  height: var(--sz, 12px);
+  background: url('/imgs/orn/orn-snow.svg') no-repeat center / contain;
+  filter: drop-shadow(0 0 6px rgba(190, 222, 255, .6));
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: snowFall var(--dur, 18s) linear var(--delay, 0s) infinite;
+}
+
+/* 细雪点：制造纵深 */
+.fx-dot {
+  position: absolute;
+  top: -6vh;
+  width: var(--sz, 3px);
+  height: var(--sz, 3px);
+  border-radius: 50%;
+  background: #eef5ff;
+  box-shadow: 0 0 6px 2px rgba(200, 224, 255, .45);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: snowDrift var(--dur, 14s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes snowFall {
+  0%   { transform: translate3d(0, -8vh, 0) rotate(0deg) scale(.85); opacity: 0; }
+  10%  { opacity: var(--op, .45); }
+  86%  { opacity: var(--op, .45); }
+  100% { transform: translate3d(var(--sway, 20px), 108vh, 0) rotate(var(--rot, 120deg)) scale(1.06); opacity: 0; }
+}
+
+@keyframes snowDrift {
+  0%   { transform: translate3d(0, -6vh, 0); opacity: 0; }
+  12%  { opacity: var(--op, .3); }
+  88%  { opacity: var(--op, .3); }
+  100% { transform: translate3d(var(--sway, 12px), 106vh, 0); opacity: 0; }
+}
+
+/* 背景缓慢横向漂移（视差感） */
+@keyframes skyDrift {
+  from { background-position: 43% 50%; }
+  to   { background-position: 57% 50%; }
+}
+
+/* 角色上下漂浮 + 轻微侧倾与呼吸缩放 */
+@keyframes charFloat {
+  from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  to   { transform: translate3d(0, -34px, 0) rotate(-1.4deg) scale(1.018); }
+}
+
+/* 光点从下往上飘并淡出 */
+@keyframes starRise {
+  0%   { transform: translate3d(0, 0, 0) scale(.6); opacity: 0; }
+  12%  { opacity: .95; }
+  70%  { opacity: .65; }
+  100% { transform: translate3d(30px, -104vh, 0) scale(1.2); opacity: 0; }
+}
+
+/* 紫色辉光呼吸（幅度加大，肉眼可见） */
+@keyframes glowBreathe {
+  from { opacity: .42; }
+  to   { opacity: 1; }
+}
+
+/* 头像辉光呼吸（transform 被主题的滚动旋转占用，所以只动 filter） */
+@keyframes avatarGlow {
+  from { filter: drop-shadow(0 0 8px rgba(196, 148, 213, .55)); }
+  to   { filter: drop-shadow(0 0 17px rgba(196, 148, 213, .95)); }
+}
+
+.main-left--avatar {
+  animation: avatarGlow 4.5s ease-in-out infinite alternate;
+}
+
+/* 卡片与按钮的悬浮反馈 */
+.main-left--block,
+.main-right--board,
+.main-right--site,
+.operate-item,
+.index-article {
+  transition: transform .32s cubic-bezier(.22, .61, .36, 1), box-shadow .32s ease;
+}
+
+.main-left--block:hover,
+.main-right--board:hover,
+.main-right--site:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(72, 48, 104, .34);
+}
+
+.operate-item:hover {
+  transform: translateY(-2px);
+}
+
+.index-article:hover {
+  box-shadow: 0 12px 26px rgba(72, 48, 104, .42);
+}
+
+.main-left--statics > a {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.main-left--statics > a:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* 窄屏下内容会铺满，隐藏立绘避免遮挡 */
+@media screen and (max-width: 1200px) {
+  .char-layer {
+    display: none;
+  }
+}
+
+/* 大雪花：可点击（只在空白区域可点，因为内容层级更高，不会挡住链接） */
+.fx-flake--big {
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 0 11px rgba(200, 228, 255, .9));
+  transition: filter .25s ease;
+}
+
+.fx-flake--big:hover {
+  filter: drop-shadow(0 0 18px rgba(232, 244, 255, 1)) brightness(1.18);
+}
+
+/* 鼠标指针粒子：星芒与雪花交替，颜色沿用角色的紫/冰蓝 */
+.cursor-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.cursor-spark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  background: url('/imgs/orn/orn-spark.svg') no-repeat center / contain;
+  filter: drop-shadow(0 0 5px rgba(196, 148, 213, .85));
+  will-change: transform, opacity;
+}
+
+.cursor-spark--flake {
+  background-image: url('/imgs/orn/orn-snow.svg');
+  filter: drop-shadow(0 0 5px rgba(190, 222, 255, .9));
+}
+
+/* 说明：这里刻意不做 prefers-reduced-motion 的动效禁用。
+   有站点会因为系统"减少动画效果"开关而整套动效被静默停掉，
+   而本站的动效是明确的视觉需求，所以保持始终播放。 */
+
+#load .load-circle {
+  border-color: #b683d6;
+  border-bottom-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(182, 131, 214, .9));
+}
+
+#load .load-circle-inner {
+  border-color: #c9a259;
+  border-top-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(201, 162, 89, .8));
+}
+
+#load .load-text {
+  color: #d9c6ea;
+}
+
+#load .load-text span {
+  text-shadow: 0 0 10px rgba(182, 131, 214, .9);
+}
+
+/* ---------- 顶部滚动进度条：绿 → 紫金渐变 ---------- */
+#progress.progress {
+  background: linear-gradient(90deg, #8e6b9a, #b683d6 45%, #c9a259);
+  box-shadow: 0 0 8px rgba(182, 131, 214, .8);
+}
+
+/* ---------- 文章页细节 ---------- */
+.index-article {
+  box-shadow: 0 4px 16px rgba(72, 48, 104, .3);
+}
+
+.index-article--box {
+  background-color: #2f2739;
+}
+
+.article-cover {
+  border-radius: 6px;
+}
+
+.post-category,
+.article-content a,
+.markdown-body a {
+  color: #8e6b9a;
+}
+
+/* 搜索面板里的高亮 */
+.header-search--layer li div a span {
+  color: #c9a259;
+}

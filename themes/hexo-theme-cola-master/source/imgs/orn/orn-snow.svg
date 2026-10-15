@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- 六角雪花结晶（参考该套三视图里角色身边的雪花特效） -->
+  <g stroke="#eaf4ff" stroke-width="1.35" stroke-linecap="round" fill="none">
+    <path d="M12 1.6 V22.4"/>
+    <path d="M3.0 6.8 L21.0 17.2"/>
+    <path d="M21.0 6.8 L3.0 17.2"/>
+    <!-- 每根主枝上的短分叉 -->
+    <path d="M12 5.6 L9.4 3.6 M12 5.6 L14.6 3.6"/>
+    <path d="M12 18.4 L9.4 20.4 M12 18.4 L14.6 20.4"/>
+    <path d="M6.0 8.6 L4.9 5.7 M6.0 8.6 L3.1 9.7"/>
+    <path d="M18.0 15.4 L19.1 18.3 M18.0 15.4 L20.9 14.3"/>
+    <path d="M18.0 8.6 L19.1 5.7 M18.0 8.6 L20.9 9.7"/>
+    <path d="M6.0 15.4 L4.9 18.3 M6.0 15.4 L3.1 14.3"/>
+  </g>
+  <circle cx="12" cy="12" r="1.9" fill="#ffffff" opacity="0.9"/>
+</svg>

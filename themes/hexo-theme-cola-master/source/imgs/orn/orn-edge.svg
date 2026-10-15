@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 16" width="1920" height="16" preserveAspectRatio="none">
+  <!-- 顶栏收边：一条两端淡出的金线 + 疏密不均的星芒，替代原来密集平铺的蕾丝 -->
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c9a259" stop-opacity="0"/>
+      <stop offset="0.12" stop-color="#c9a259" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#e0d3f0" stop-opacity="0.85"/>
+      <stop offset="0.88" stop-color="#c9a259" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#c9a259" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#c394d5" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#c394d5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="960" cy="13" rx="360" ry="9" fill="url(#halo)"/>
+  <rect x="0" y="7.4" width="1920" height="1.2" fill="url(#fade)"/>
+
+  <!-- 中心：环 + 四角星芒 -->
+  <circle cx="960" cy="8" r="5.4" fill="none" stroke="#c9a259" stroke-width="1" opacity="0.85"/>
+  <path d="M960 1.6 Q 961.8 6.2 966.4 8 Q 961.8 9.8 960 14.4 Q 958.2 9.8 953.6 8 Q 958.2 6.2 960 1.6 Z"
+        fill="#f5f1f9" stroke="#b683d6" stroke-width="0.8"/>
+  <!-- 两侧稀疏星芒（大小与位置刻意不均匀） -->
+  <path d="M420 3.2 Q 421.4 6.8 425 8.2 Q 421.4 9.6 420 13.2 Q 418.6 9.6 415 8.2 Q 418.6 6.8 420 3.2 Z" fill="#e6d8f5" opacity="0.75"/>
+  <path d="M700 4.6 Q 701 7.2 703.6 8.2 Q 701 9.2 700 11.8 Q 699 9.2 696.4 8.2 Q 699 7.2 700 4.6 Z" fill="#c9a259" opacity="0.6"/>
+  <path d="M1240 4.2 Q 1241.2 7.3 1244.3 8.4 Q 1241.2 9.5 1240 12.6 Q 1238.8 9.5 1235.7 8.4 Q 1238.8 7.3 1240 4.2 Z" fill="#c9a259" opacity="0.55"/>
+  <path d="M1520 3.4 Q 1521.5 6.9 1525 8.4 Q 1521.5 9.9 1520 13.4 Q 1518.5 9.9 1515 8.4 Q 1518.5 6.9 1520 3.4 Z" fill="#e6d8f5" opacity="0.7"/>
+  <circle cx="300" cy="8.2" r="1.4" fill="#e6d8f5" opacity="0.5"/>
+  <circle cx="1040" cy="8.2" r="1.2" fill="#c9a259" opacity="0.45"/>
+  <circle cx="1700" cy="8.2" r="1.3" fill="#e6d8f5" opacity="0.45"/>
+</svg>

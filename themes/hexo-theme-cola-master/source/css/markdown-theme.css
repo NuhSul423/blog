@@ -7,7 +7,7 @@
   overflow-x: hidden;
   color: #2b2b2b;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-  background-image: linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(159, 219, 252, 0.15) 3%, rgba(0, 0, 0, 0) 3%);
+  background-image: linear-gradient(90deg, rgba(196, 148, 213, 0.15) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(196, 148, 213, 0.15) 3%, rgba(0, 0, 0, 0) 3%);
   background-size: 20px 20px;
   background-position: center center;
   /* 图片描述文字 */
@@ -19,7 +19,7 @@
   padding: 30px 0;
   margin-top: 35px;
   margin-bottom: 10px;
-  color: #4dd0e1;
+  color: #9a72bd;
 }
 .markdown-body h1 {
   font-size: 30px;
@@ -50,7 +50,7 @@
   height: 50%;
   bottom: 12px;
   border-radius: 50%;
-  background: linear-gradient(rgba(0, 0, 0, 0) 80%, rgba(77, 208, 225, 0.8));
+  background: linear-gradient(rgba(0, 0, 0, 0) 80%, rgba(154, 114, 189, 0.8));
   background-size: 400% 200%;
   opacity: 0.6;
   animation: h1Animate 6s infinite linear;
@@ -68,7 +68,7 @@
 }
 .markdown-body h2 {
   display: block;
-  border-bottom: 4px solid #4dd0e1;
+  border-bottom: 4px solid #9a72bd;
   position: relative;
   font-size: 24px;
   padding: 12px 32px;
@@ -96,7 +96,7 @@
   width: 400px;
   height: 10px;
   border-top-right-radius: 24px;
-  background: linear-gradient(to right, #fff, #4dd0e1);
+  background: linear-gradient(to right, #fff, #9a72bd);
   max-width: 50vw;
 }
 .markdown-body h3 {
@@ -107,7 +107,7 @@
   width: max-content;
 }
 .markdown-body h3:before {
-  border-bottom: 2px solid #4dd0e1;
+  border-bottom: 2px solid #9a72bd;
   width: 100%;
   content: "";
   display: block;
@@ -142,7 +142,7 @@
   width: 28px;
   height: 28px;
   position: absolute;
-  border: 2px solid #4dd0e1;
+  border: 2px solid #9a72bd;
   border-radius: 50%;
   right: -15px;
   top: 0;
@@ -208,7 +208,7 @@
   margin-bottom: -5px;
 }
 .markdown-body hr {
-  border-top: 1px solid #4dd0e1;
+  border-top: 1px solid #9a72bd;
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -216,14 +216,14 @@
   margin-bottom: 32px;
 }
 .markdown-body del {
-  color: #4dd0e1;
+  color: #9a72bd;
 }
 .markdown-body code {
   word-break: break-word;
   border-radius: 2px;
   overflow-x: auto;
-  background-color: rgba(77, 208, 225, 0.08);
-  color: #26c6da;
+  background-color: rgba(154, 114, 189, 0.08);
+  color: #8e6b9a;
   padding: 0.195em 0.4em;
 }
 .markdown-body .gutter {
@@ -257,17 +257,17 @@
   background: #f8f8f8;
 }
 .markdown-body a {
-  color: #4dd0e1;
-  border-bottom: 1px solid #4dd0e1;
+  color: #9a72bd;
+  border-bottom: 1px solid #9a72bd;
   font-weight: 400;
   text-decoration: none;
   margin: 0 4px;
 }
 .markdown-body a:hover, .markdown-body a:active {
-  background-color: rgba(77, 208, 225, 0.1);
+  background-color: rgba(154, 114, 189, 0.1);
 }
 .markdown-body strong {
-  color: #26c6da;
+  color: #8e6b9a;
 }
 .markdown-body strong::before {
   content: "「";
@@ -277,7 +277,7 @@
 }
 .markdown-body em {
   font-style: normal;
-  color: #4dd0e1;
+  color: #9a72bd;
   font-weight: bold;
 }
 .markdown-body table {
@@ -294,7 +294,7 @@
   text-align: left;
 }
 .markdown-body tr:nth-child(2n) {
-  background-color: rgba(77, 208, 225, 0.05);
+  background-color: rgba(154, 114, 189, 0.05);
 }
 .markdown-body th, .markdown-body td {
   padding: 12px 7px;
@@ -306,15 +306,15 @@
 .markdown-body blockquote {
   margin: 2em 0;
   padding: 24px 32px;
-  border-left: 4px solid #26c6da;
-  background: rgba(77, 208, 225, 0.15);
+  border-left: 4px solid #8e6b9a;
+  background: rgba(154, 114, 189, 0.15);
   position: relative;
 }
 .markdown-body blockquote::before {
   content: "❝";
   top: 8px;
   left: 8px;
-  color: #4dd0e1;
+  color: #9a72bd;
   font-size: 30px;
   line-height: 1;
   font-weight: 700;
@@ -327,7 +327,7 @@
   position: absolute;
   right: 8px;
   bottom: 0;
-  color: #4dd0e1;
+  color: #9a72bd;
   opacity: 0.7;
 }
 .markdown-body blockquote p {

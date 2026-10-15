@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- 主套（白蓝紫）纹章：环 + 四角星芒 + 双侧月牙能量弧 -->
+  <g fill="none" stroke-linecap="round">
+    <circle cx="60" cy="60" r="51" stroke="#b683d6" stroke-width="2" stroke-dasharray="7 7" opacity=".9"/>
+    <circle cx="60" cy="60" r="44" stroke="#c9a259" stroke-width="1.2" opacity=".8"/>
+    <!-- 月牙（取自该套的紫光弧） -->
+    <path d="M26 74 A22 22 0 1 0 26 34 A17 17 0 1 1 26 74 Z" fill="#8e6b9a" stroke="none" opacity=".9"/>
+    <path d="M94 46 A22 22 0 1 0 94 86 A17 17 0 1 1 94 46 Z" fill="#8e6b9a" stroke="none" opacity=".9"/>
+    <!-- 四角星芒（该套背景的星芒） -->
+    <path d="M60 18 Q 65 55 100 60 Q 65 65 60 102 Q 55 65 20 60 Q 55 55 60 18 Z"
+          fill="#f5f1f9" stroke="#c9a259" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="60" cy="60" r="7" fill="#c394d5" stroke="none"/>
+  </g>
+</svg>
