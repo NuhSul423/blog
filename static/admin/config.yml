@@ -1,9 +1,11 @@
+# 后台前端：Sveltia CMS（见 static/admin/index.html），读取本文件。
+#
 # 登录流程（GitHub OAuth）：
 #   /admin/ 打开弹窗 → /api/auth 302 跳转 GitHub → 用户授权
 #   → GitHub 回跳 /api/callback 换取 token → postMessage 握手回到后台
 #
 # 注意：base_url 必须和管理后台的访问地址完全一致，
-# netlify-cms 会校验 postMessage 的来源 origin 等于 base_url。
+# 前端会校验 postMessage 的来源 origin 等于 base_url。
 # 因此请始终使用 https://super-meringue-6c70e2.netlify.app/admin/ 访问后台，
 # 不要用 main--super-meringue-6c70e2.netlify.app 之类的分支别名。
 backend:
@@ -28,11 +30,7 @@ collections:
       - { label: '日期', name: 'date', widget: 'datetime' }
       - { label: '分类', name: 'categories', widget: 'list', default: ['未分类'] }
       - { label: '标签', name: 'tags', widget: 'list' }
-      # modes: ['raw'] 强制使用原始 Markdown 编辑器。
-      # netlify-cms 2.x 的富文本（rich_text / Slate）编辑器在中文输入法组合输入
-      # 时经常不把内容提交进 entry，保存时会误报「内容 IS REQUIRED」。
-      # 想换回富文本编辑器，把这里改成 modes: ['rich_text', 'raw']。
-      - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
+      - { label: '内容', name: 'body', widget: 'markdown' }
 
   - name: 'page'
     label: '页面'
@@ -42,16 +40,16 @@ collections:
         file: 'source/about/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
+          - { label: '内容', name: 'body', widget: 'markdown' }
       - label: '链接页面'
         name: 'link'
         file: 'source/link/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
+          - { label: '内容', name: 'body', widget: 'markdown' }
       - label: '工具页面'
         name: 'tools'
         file: 'source/tools/index.md'
         fields:
           - { label: '标题', name: 'title', widget: 'string' }
-          - { label: '内容', name: 'body', widget: 'markdown', modes: ['raw'] }
+          - { label: '内容', name: 'body', widget: 'markdown' }

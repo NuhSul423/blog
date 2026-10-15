@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blog Admin</title>
-  <link rel="stylesheet" href="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.css" />
+  <title>博客后台</title>
+  <meta name="robots" content="noindex" />
 </head>
 <body>
-  <script src="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js"></script>
+  <!--
+    Sveltia CMS：Netlify/Decap CMS 的现代替代品，读取同一份 config.yml，
+    并使用同一个 GitHub OAuth 后端（/api/auth + /api/callback），无需改动。
+
+    换掉 netlify-cms 的原因：netlify-cms 的富文本编辑器基于 Slate，
+    在 Windows + 微软拼音下存在已知缺陷 —— 中文输入时光标错位、内容无法
+    写入 entry、保存时报「内容 IS REQUIRED」。Sveltia 的编辑器基于 Lexical，
+    并会自动按浏览器语言显示界面（简体中文无需额外配置）。
+
+    版本号固定，避免上游更新带来意外变化；想升级时改这里的版本号即可。
+  -->
+  <script src="https://unpkg.com/@sveltia/cms@0.242.0/dist/sveltia-cms.js"></script>
 </body>
 </html>

@@ -118,29 +118,48 @@ curl -s "https://super-meringue-6c70e2.netlify.app/api/callback?code=test" | hea
 | 后台提示登录失败、弹窗自动关闭 | 弹窗与后台不同域，或 `config.yml` 的 `base_url` 与访问地址不一致 |
 | 回调页提示缺少 `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Netlify 环境变量没配或没重新部署 |
 | 回调页提示 `The client_id and/or client_secret passed are incorrect` | Netlify 上的 `GITHUB_CLIENT_SECRET` 与 OAuth App 当前的 Client secret 不一致（secret 重新生成过，或粘贴时带了空格/换行）。GitHub 会先校验客户端凭据再校验 code，所以 code 无效时也是这条报错 |
+| 正文能打字，但光标总跳回最左边、删不掉、保存报「内容 IS REQUIRED」 | 旧版 `netlify-cms` 的 Slate 编辑器在中文输入法（IME）下的已知缺陷，见下文第五节。已通过改用 Sveltia CMS 解决 |
 
-## 五、为什么强制使用原始 Markdown 编辑器
+## 五、为什么把前端从 netlify-cms 换成 Sveltia CMS
 
-`static/admin/config.yml` 里所有 `widget: markdown` 的字段都加了 `modes: ['raw']`。
+`static/admin/index.html` 加载的是 `@sveltia/cms`（版本号固定），
+`config.yml` 依旧是标准的 Netlify/Decap CMS 配置格式，两边通吃。
 
-原因：`netlify-cms@2.10.192` 的富文本编辑器是 Slate 那套，它有两个要命的地方：
+### 换掉的原因
 
-1. 内容通过 `debounce(..., 150)` 才提交给 entry（`MarkdownControl` 的
-   `handleDocumentChange`），编辑器里看到的字和 entry 里的值会短暂不一致；
-2. Slate 这一代对**中文输入法组合输入（IME）**支持很差，`测试` 这类通过输入法
-   上屏的文字经常没有进入 Slate 的文档状态，于是提交给 entry 的是空字符串。
+`netlify-cms@2.10.192` 的正文编辑器（包括它所谓的"原始 Markdown 模式"，
+`cms-editor-raw` 内部一样是 `data-slate-editor`）基于 **Slate**。
+在 Windows + 微软拼音下它有已知缺陷：
 
-结果就是保存时校验（ajv 的 `required`，文案模板
-`"%{fieldLabel} is required."`）判定 `body` 为空，界面报
-「内容 IS REQUIRED」—— 但编辑器里明明有字。这属于编辑器缺陷，不是配置写错，
-所以用 `modes: ['raw']` 直接换成 CodeMirror 原始编辑器（每次输入同步 onChange，
-没有 IME 问题，也自带实时预览）。
+* 官方 issue：<https://github.com/decaporg/decap-cms/issues/6287>
+  「Windows 11 下用微软拼音在 Body 编辑框输入中文时光标错位」；
+* 表现：输入法上屏的文字进入了编辑器 DOM，却没有进入 entry 的值，
+  于是每次按键编辑器都被父组件的旧 `value` 覆盖 —— 光标跳回最左边、
+  删除无效，保存时 ajv 的必填校验（模板 `"%{fieldLabel} is required."`）
+  判定 `body` 为空，界面报「内容 IS REQUIRED」；
+* 这条链路和字段配置无关：同一个 entry 里 `title`、`tags` 都正常，
+  只有正文（唯一的 markdown 字段）存不进去。
 
-想换回富文本编辑器：把 `modes: ['raw']` 改成 `modes: ['rich_text', 'raw']`
-（或整段删掉，默认就是 `rich_text`）。编辑器当前选择存在浏览器
-`localStorage` 的 `cms.md-mode` 键里，默认值是 `rich_text`。
+Sveltia CMS 正是为修复这一类问题而做的：编辑器换成 **Lexical**，
+并明确把 #6287 列为它解决的问题之一。
 
-如果哪天想彻底升级，可以考虑把 `static/admin/index.html` 里的
-`netlify-cms@2.10.192` 换成 `@sveltia/cms`（兼容同一份 `config.yml` 和同一套
-GitHub OAuth，富文本改用 Lexical）—— 但它对 OAuth 握手的实现需要重新验证。
+### 迁移代价几乎为零
+
+* **OAuth 后端不用改**：Sveltia 复用同一套握手协议，我们代码里实现的
+  `authorizing:github` → 父窗口回发 → `authorization:github:success:{token}`
+  与 Sveltia 源码里的实现完全一致；官方迁移文档也写明
+  "If you have set up an OAuth application for Netlify/Decap CMS,
+  you can continue using it with Sveltia CMS"。
+* **界面语言自动跟随浏览器**，简体中文无需配置（旧版需要 `locale: 'zh_Hans'` 且要额外引入语言包）。
+* `publish_mode`、`media_folder`、`public_folder`、`slug`、各种 widget 都兼容。
+
+### 需要注意的差异
+
+* Sveltia 仍是 0.x（beta），所以我们**固定版本号**而不是用 `@latest`；
+  升级时改 `static/admin/index.html` 里的版本号即可。
+* Sveltia 会**标记必填字段**（旧版标记可选字段），只是视觉差异。
+* 空的可选字段默认不再被省略。若发现 front matter 里出现多余的
+  `tags:` 空行，可加 `output: { omit_empty_optional_fields: true }`。
+* 之前为了绕开 Slate 加的 `modes: ['raw']` 已删除（Sveltia 不使用该选项）。
+
 
